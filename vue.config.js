@@ -7,5 +7,5 @@
  * 5. 注意配置静态资源的publicPath
  */
 module.exports = {
-  publicPath: '/jingdong'
+  publicPath: './'
 }
