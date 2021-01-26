@@ -85,6 +85,79 @@
         </div>
     </div>
     <div class="gap"></div>
+    <div class="nearby">
+      <div class="nearby__title">附近店铺</div>
+      <div class="nearby__item">
+        <img class="nearby__item__img"
+            src="http://www.dell-lee.com/imgs/vue3/near.png"
+            alt=""/>
+        <div class="nearby__content">
+          <div class="nearby__content__title">沃尔玛</div>
+          <div class="nearby__content__tags">
+            <span iclass="nearby__content__tag">月售1万+</span>
+            <span class="nearby__content__tag">月售1万+</span>
+            <sapn class="nearby__content__tag">月售1万+</sapn>
+          </div>
+          <div class="nearby__content__highlight">VIP尊享满89元减4元运费券（每月3张）</div>
+        </div>
+      </div>
+      <div class="nearby__item">
+        <img class="nearby__item__img"
+            src="http://www.dell-lee.com/imgs/vue3/near.png"
+            alt=""/>
+        <div class="nearby__content">
+          <div class="nearby__content__title">沃尔玛</div>
+          <div class="nearby__content__tags">
+            <span iclass="nearby__content__tag">月售1万+</span>
+            <span class="nearby__content__tag">月售1万+</span>
+            <sapn class="nearby__content__tag">月售1万+</sapn>
+          </div>
+          <div class="nearby__content__highlight">VIP尊享满89元减4元运费券（每月3张）</div>
+        </div>
+      </div>
+      <div class="nearby__item">
+        <img class="nearby__item__img"
+            src="http://www.dell-lee.com/imgs/vue3/near.png"
+            alt=""/>
+        <div class="nearby__content">
+          <div class="nearby__content__title">沃尔玛</div>
+          <div class="nearby__content__tags">
+            <span iclass="nearby__content__tag">月售1万+</span>
+            <span class="nearby__content__tag">月售1万+</span>
+            <sapn class="nearby__content__tag">月售1万+</sapn>
+          </div>
+          <div class="nearby__content__highlight">VIP尊享满89元减4元运费券（每月3张）</div>
+        </div>
+      </div>
+      <div class="nearby__item">
+        <img class="nearby__item__img"
+            src="http://www.dell-lee.com/imgs/vue3/near.png"
+            alt=""/>
+        <div class="nearby__content">
+          <div class="nearby__content__title">沃尔玛</div>
+          <div class="nearby__content__tags">
+            <span iclass="nearby__content__tag">月售1万+</span>
+            <span class="nearby__content__tag">月售1万+</span>
+            <sapn class="nearby__content__tag">月售1万+</sapn>
+          </div>
+          <div class="nearby__content__highlight">VIP尊享满89元减4元运费券（每月3张）</div>
+        </div>
+      </div>
+      <div class="nearby__item">
+        <img class="nearby__item__img"
+            src="http://www.dell-lee.com/imgs/vue3/near.png"
+            alt=""/>
+        <div class="nearby__content">
+          <div class="nearby__content__title">沃尔玛</div>
+          <div class="nearby__content__tags">
+            <span iclass="nearby__content__tag">月售1万+</span>
+            <span class="nearby__content__tag">月售1万+</span>
+            <sapn class="nearby__content__tag">月售1万+</sapn>
+          </div>
+          <div class="nearby__content__highlight">VIP尊享满89元减4元运费券（每月3张）</div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="docker">
     <div class="docker__item docker__item--active">
@@ -115,7 +188,8 @@
   right: 0;
   top: 0;
   bottom: .5rem;
-  padding: 0 .18rem;
+  padding: 0 .18rem .1rem .18rem;
+  overflow-y: auto;
 }
 .position {
   position: relative;
@@ -184,6 +258,50 @@
   height: .1rem;
   background: $content-bgColor;
 }
+
+.nearby {
+  &__title {
+    margin: .16rem 0 .02rem 0;
+    font-size: .18rem;
+    font-weight: normal;
+    color: $content-font-color;
+  }
+  &__item {
+    display: flex;
+    padding-top: .12rem;
+    &__img {
+      margin-right: .16rem;
+      width: .56rem;
+      height: .56rem;
+    }
+  }
+  &__content {
+    flex: 1;
+    padding-bottom: .12rem;
+    border-bottom: .01rem solid $content-bgColor;
+    &__title {
+      line-height: .22rem;
+      font-size: .16rem;
+      color: $content-font-color;
+    }
+    &__tags {
+      margin-top: .08rem;
+      line-height: .18rem;
+      font-size: .13rem;
+      color: $content-font-color;
+    }
+    &__tag {
+      margin-right: .16rem;
+    }
+    &__highlight {
+      margin: .08rem 0 0 0;
+      line-height: .18rem;
+      font-size: .13rem;
+      color: #E93B3B;
+    }
+  }
+}
+
 .docker {
   display: flex;
   position: absolute;
