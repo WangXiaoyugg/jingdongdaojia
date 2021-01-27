@@ -7,8 +7,11 @@
     <div class="wrapper__input">
       <input class="wrapper__input__content" placeholder="请输入密码" type="password">
     </div>
-    <div class="wrapper__login__button" @click="onLogin">登录</div>
-    <div class="wrapper__login__link" @click="goRegisterPage">立即注册</div>
+    <div class="wrapper__input">
+      <input class="wrapper__input__content" placeholder="请再次输入密码" type="password">
+    </div>
+    <div class="wrapper__login__button">注册</div>
+    <div class="wrapper__login__link" @click="goLoginPage">已有账号立即登录</div>
   </div>
 </template>
 
@@ -18,14 +21,10 @@ export default {
   name: 'Login',
   setup () {
     const router = useRouter()
-    const onLogin = () => {
-      localStorage.isLogin = true
-      router.push({ name: 'Home' })
+    const goLoginPage = () => {
+      router.push({ name: 'Login' })
     }
-    const goRegisterPage = () => {
-      router.push({ name: 'Register' })
-    }
-    return { onLogin, goRegisterPage }
+    return { goLoginPage }
   }
 }
 </script>
