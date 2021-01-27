@@ -23,6 +23,7 @@
 <script>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { post } from '../../utils/request'
 import axios from 'axios'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 export default {
@@ -33,14 +34,18 @@ export default {
       username: '',
       password: ''
     })
-    const onLogin = () => {
-      axios.post('https://www.fastmock.site/mock/ae8e9031947a302fed5f92425995aa19/jd/api/user/login', data)
-        .then(resp => {
+    const onLogin = async () => {
+      try {
+        const result = await post('https://www.fastmock.site/mock/ae8e9031947a302fed5f92425995aa19/jd/api/user/login', data)
+        if (result.errno === 0) {
           localStorage.isLogin = true
           router.push({ name: 'Home' })
-        }).catch((err) => {
-          alert('登录失败:', err)
-        })
+        } else {
+          alert('登录失败')
+        }
+      } catch (err) {
+        alert('登录失败:', err)
+      }
     }
     const goRegisterPage = () => {
       router.push({ name: 'Register' })
