@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, toRefs } from 'vue'
 export default {
   name: 'Toast',
   props: {
@@ -28,7 +28,8 @@ export function useToastEffect () {
       toastData.toastMsg = ''
     }, 1000)
   }
-  return { toastData, showToast }
+  const { toastVisible, toastMsg } = toRefs(toastData)
+  return { toastVisible, toastMsg, showToast }
 }
 </script>
 

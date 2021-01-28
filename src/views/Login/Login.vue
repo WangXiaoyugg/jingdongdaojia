@@ -6,52 +6,70 @@
         class="wrapper__input__content"
         placeholder="请输入姓名"
         type="text"
-        v-model="data.username" />
+        v-model="username" />
     </div>
     <div class="wrapper__input">
       <input
         class="wrapper__input__content"
         placeholder="请输入密码"
         type="password"
-        v-model="data.password" />
+        v-model="password" />
     </div>
     <div class="wrapper__login__button" @click="onLogin">登录</div>
     <div class="wrapper__login__link" @click="goRegisterPage">立即注册</div>
   </div>
-  <Toast v-if="toastData.toastVisible" :msg="toastData.toastMsg"/>
+  <Toast v-if="toastVisible" :msg="toastMsg"/>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { post } from '../../utils/request'
 import Toast, { useToastEffect } from '../../components/Toast'
+const useLoginEffect = (showToast) => {
+  const router = useRouter()
+  const data = reactive({ username: '', password: '' })
+  const onLogin = async () => {
+    try {
+      const result = await post('/user/login', data)
+      if (result.errno === 0) {
+        localStorage.isLogin = true
+        router.push({ name: 'Home' })
+      } else {
+        showToast('登录失败')
+      }
+    } catch (err) {
+      showToast('请求失败')
+    }
+  }
+  const { username, password } = toRefs(data)
+  return { username, password, onLogin }
+}
+const useRegisterEffect = () => {
+  const router = useRouter()
+  const goRegisterPage = () => {
+    router.push({ name: 'Register' })
+  }
+  return { goRegisterPage }
+}
 export default {
   name: 'Login',
   components: {
     Toast
   },
+  // setup函数的职责，就是代码执行的流程逻辑
   setup () {
-    const router = useRouter()
-    const data = reactive({ username: '', password: '' })
-    const { toastData, showToast } = useToastEffect()
-    const onLogin = async () => {
-      try {
-        const result = await post('/user/login', data)
-        if (result.errno === 0) {
-          localStorage.isLogin = true
-          router.push({ name: 'Home' })
-        } else {
-          showToast('登录失败')
-        }
-      } catch (err) {
-        showToast('请求失败')
-      }
+    const { toastVisible, toastMsg, showToast } = useToastEffect()
+    const { goRegisterPage } = useRegisterEffect()
+    const { password, username, onLogin } = useLoginEffect(showToast)
+    return {
+      onLogin,
+      goRegisterPage,
+      username,
+      password,
+      toastVisible,
+      toastMsg
     }
-    const goRegisterPage = () => {
-      router.push({ name: 'Register' })
-    }
-    return { onLogin, goRegisterPage, data, toastData }
   }
 }
 </script>
