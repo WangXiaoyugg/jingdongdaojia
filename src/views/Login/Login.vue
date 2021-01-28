@@ -18,33 +18,46 @@
     <div class="wrapper__login__button" @click="onLogin">登录</div>
     <div class="wrapper__login__link" @click="goRegisterPage">立即注册</div>
   </div>
+  <Toast v-if="data.toastVisible" :msg="data.toastMsg"/>
 </template>
 
 <script>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { post } from '../../utils/request'
-import axios from 'axios'
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+import Toast from '../../components/Toast'
 export default {
   name: 'Login',
+  components: {
+    Toast
+  },
   setup () {
     const router = useRouter()
     const data = reactive({
       username: '',
-      password: ''
+      password: '',
+      toastVisible: false,
+      toastMsg: ''
     })
+    const showToast = (msg) => {
+      data.toastVisible = true
+      data.toastMsg = msg
+      setTimeout(() => {
+        data.toastVisible = false
+        data.toastMsg = ''
+      }, 1000)
+    }
     const onLogin = async () => {
       try {
-        const result = await post('https://www.fastmock.site/mock/ae8e9031947a302fed5f92425995aa19/jd/api/user/login', data)
+        const result = await post('user/login', data)
         if (result.errno === 0) {
           localStorage.isLogin = true
           router.push({ name: 'Home' })
         } else {
-          alert('登录失败')
+          showToast('登录失败')
         }
       } catch (err) {
-        alert('登录失败:', err)
+        showToast('请求失败')
       }
     }
     const goRegisterPage = () => {
