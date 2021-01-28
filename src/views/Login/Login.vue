@@ -18,14 +18,14 @@
     <div class="wrapper__login__button" @click="onLogin">登录</div>
     <div class="wrapper__login__link" @click="goRegisterPage">立即注册</div>
   </div>
-  <Toast v-if="data.toastVisible" :msg="data.toastMsg"/>
+  <Toast v-if="toastData.toastVisible" :msg="toastData.toastMsg"/>
 </template>
 
 <script>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { post } from '../../utils/request'
-import Toast from '../../components/Toast'
+import Toast, { useToastEffect } from '../../components/Toast'
 export default {
   name: 'Login',
   components: {
@@ -33,23 +33,11 @@ export default {
   },
   setup () {
     const router = useRouter()
-    const data = reactive({
-      username: '',
-      password: '',
-      toastVisible: false,
-      toastMsg: ''
-    })
-    const showToast = (msg) => {
-      data.toastVisible = true
-      data.toastMsg = msg
-      setTimeout(() => {
-        data.toastVisible = false
-        data.toastMsg = ''
-      }, 1000)
-    }
+    const data = reactive({ username: '', password: '' })
+    const { toastData, showToast } = useToastEffect()
     const onLogin = async () => {
       try {
-        const result = await post('user/login', data)
+        const result = await post('/user/login', data)
         if (result.errno === 0) {
           localStorage.isLogin = true
           router.push({ name: 'Home' })
@@ -63,7 +51,7 @@ export default {
     const goRegisterPage = () => {
       router.push({ name: 'Register' })
     }
-    return { onLogin, goRegisterPage, data }
+    return { onLogin, goRegisterPage, data, toastData }
   }
 }
 </script>

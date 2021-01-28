@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
 export default {
   name: 'Toast',
   props: {
@@ -13,6 +14,21 @@ export default {
       default: ''
     }
   }
+}
+export function useToastEffect () {
+  const toastData = reactive({
+    toastVisible: false,
+    toastMsg: ''
+  })
+  const showToast = (msg) => {
+    toastData.toastVisible = true
+    toastData.toastMsg = msg
+    setTimeout(() => {
+      toastData.toastVisible = false
+      toastData.toastMsg = ''
+    }, 1000)
+  }
+  return { toastData, showToast }
 }
 </script>
 
