@@ -1,11 +1,13 @@
 <template>
   <div class="nearby">
     <div class="nearby__title">附近店铺</div>
-    <ShopInfo
+    <router-link
+      to="/shop"
       v-for="item in nearbyList"
       :key="item._id"
-      :item="item"
-    />
+    >
+      <ShopInfo :item="item"/>
+    </router-link>
   </div>
 </template>
 
@@ -39,45 +41,14 @@ export default {
 <style lang="scss" scoped>
 @import "../../style/variables.scss";
 .nearby {
+  a {
+    text-decoration: none;
+  }
   &__title {
     margin: .16rem 0 .02rem 0;
     font-size: .18rem;
     font-weight: normal;
     color: $content-font-color;
-  }
-  &__item {
-    display: flex;
-    padding-top: .12rem;
-    &__img {
-      margin-right: .16rem;
-      width: .56rem;
-      height: .56rem;
-    }
-  }
-  &__content {
-    flex: 1;
-    padding-bottom: .12rem;
-    border-bottom: .01rem solid $content-bgColor;
-    &__title {
-      line-height: .22rem;
-      font-size: .16rem;
-      color: $content-font-color;
-    }
-    &__tags {
-      margin-top: .08rem;
-      line-height: .18rem;
-      font-size: .13rem;
-      color: $content-font-color;
-    }
-    &__tag {
-      margin-right: .16rem;
-    }
-    &__highlight {
-      margin: .08rem 0 0 0;
-      line-height: .18rem;
-      font-size: .13rem;
-      color: #E93B3B;
-    }
   }
 }
 
