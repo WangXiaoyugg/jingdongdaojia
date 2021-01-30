@@ -30,6 +30,10 @@ const useLoginEffect = (showToast) => {
   const router = useRouter()
   const data = reactive({ username: '', password: '' })
   const onLogin = async () => {
+    if (!(data.username && data.password)) {
+      showToast('姓名或密码不能为空')
+      return
+    }
     try {
       const result = await post('/user/login', data)
       if (result.errno === 0) {

@@ -45,6 +45,10 @@ const useRegisterEffect = (showToast) => {
   })
 
   const onRegister = async () => {
+    if (!(data.username && data.password && data.ensurement)) {
+      showToast('姓名或密码不能为空')
+      return
+    }
     try {
       const result = await post('/user/register', {
         username: data.username,
