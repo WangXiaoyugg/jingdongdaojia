@@ -1,46 +1,37 @@
 <template>
   <div class="nearby">
     <div class="nearby__title">附近店铺</div>
-    <div class="nearby__item"
-      v-for="(item, index) in nearbyList"
-      :key="index"
-    >
-      <img class="nearby__item__img"
-          :src="item.imgUrl"
-          alt=""/>
-      <div class="nearby__content">
-        <div class="nearby__content__title">{{item.title}}</div>
-        <div class="nearby__content__tags">
-          <span v-for="(innerItem, innerIndex) in item.tags"
-            :key="innerIndex"
-            class="nearby__content__tag"
-            >{{innerItem}}</span>
-        </div>
-        <div class="nearby__content__highlight">{{item.highlight}}</div>
-      </div>
-    </div>
+    <ShopInfo
+      v-for="item in nearbyList"
+      :key="item._id"
+      :item="item"
+    />
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
+import ShopInfo from '../../components/ShopInfo'
+import { get } from '../../utils/request'
+const useNearbyListEffect = () => {
+  const nearbyList = ref([])
+  const getNearbyList = async () => {
+    const result = await get('/shop/hot-list')
+    if (result?.errno === 0 && result?.data?.length) {
+      nearbyList.value = result.data
+    }
+  }
+  return { nearbyList, getNearbyList }
+}
 export default {
   name: 'Nearby',
+  components: {
+    ShopInfo
+  },
   setup () {
-    const nearbyList = [
-      {
-        imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
-        title: '沃尔玛',
-        tags: ['月售1万+', '起送5元', '支持花呗'],
-        highlight: 'VIP尊享满89元减4元运费券（每月3张）'
-      },
-      {
-        imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
-        title: '海底捞',
-        tags: ['日售1万+', '起送20元', '满100减50'],
-        highlight: 'VIP尊享满89元减4元运费券（每月3张）'
-      }
-    ]
-    return { nearbyList }
+    const { nearbyList, getNearbyList } = useNearbyListEffect()
+    getNearbyList()
+    return { nearbyList, getNearbyList }
   }
 }
 </script>
