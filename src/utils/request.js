@@ -6,7 +6,7 @@ const instance = axios.create({
 })
 export function get (url, params = {}) {
   return new Promise((resolve, reject) => {
-    instance.get(url, params).then(resp => {
+    instance.get(url, { params }).then(resp => {
       resolve(resp.data)
     }).catch(err => {
       reject(err)

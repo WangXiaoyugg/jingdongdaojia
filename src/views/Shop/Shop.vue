@@ -10,43 +10,61 @@
         />
       </div>
     </div>
-    <ShopInfo :item="item" :hideBorder="true" />
+    <ShopInfo :item="item" :hideBorder="true" v-show="item.imgUrl"/>
+    <Content />
   </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
+import { reactive, toRefs } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ShopInfo from '../../components/ShopInfo'
+import { get } from '../../utils/request'
+import Content from './Content.vue'
+
+const useShopInfoEffect = () => {
+  const route = useRoute()
+  const data = reactive({ item: {} })
+  const getItemData = async () => {
+    const result = await get(`/shop/${route.params.id}`)
+    if (result?.errno === 0 && result?.data) {
+      data.item = result.data
+    }
+  }
+  const { item } = toRefs(data)
+  return { item, getItemData }
+}
+
+const useBackEffect = () => {
+  const router = useRouter()
+  const onBack = () => {
+    router.back()
+  }
+  return { onBack }
+}
+
 export default {
   name: 'Shop',
   components: {
-    ShopInfo
+    ShopInfo,
+    Content
   },
   setup () {
-    const router = useRouter()
-    const item = {
-      _id: '1',
-      name: '沃尔玛',
-      imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
-      sales: 10000,
-      expressLimit: 0,
-      expressPrice: 5,
-      slogan: 'VIP尊享满89元减4元运费券'
-    }
-    const onBack = () => {
-      router.back()
-    }
+    const { item, getItemData } = useShopInfoEffect()
+    const { onBack } = useBackEffect()
+    getItemData()
     return { item, onBack }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../../style/variables.scss';
 .wrapper {
   padding: 0 .18rem;
 }
 .search {
-  margin: .2rem 0 .16rem 0;
+  margin: .14rem 0 .04rem 0;
   display: flex;
   line-height: .32rem;
   &__back {
@@ -57,13 +75,13 @@ export default {
   &__content {
     display: flex;
     flex: 1;
-    background: #f5f5f5;
+    background: $search-bgColor;
     border-radius: .16rem;
     &__icon {
       width: .44rem;
       line-height: .32rem;
       text-align: center;
-      color: #b7b7b7;
+      color: $search-fontColor;
     }
     &__input {
       padding-right: .2rem;
@@ -72,10 +90,10 @@ export default {
       border: none;
       outline: none;
       background: none;
-      color:#333;
+      color:$content-font-color;
       font-size: 0.14rem;
       &::placeholder {
-        color:#333;
+        color:$content-font-color;
       }
     }
   }
