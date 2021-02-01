@@ -6,6 +6,11 @@
         :key="item._id"
       >
         <div class="product__item" v-if="item.count > 0">
+          <div
+            class="product__item__checked iconfont"
+            v-html="item.check ? '&#xe652;': '&#xe667;'"
+            @click="() => changeCartItemChecked(shopId, item._id)"
+          ></div>
           <img class="product__item__img" :src="item.imgUrl" />
           <div class="product__item__detail">
             <h4 class="product__item__title">{{item.name}}</h4>
@@ -71,7 +76,9 @@ const useCartEffect = (shopId) => {
     if (productList) {
       for (const i in productList) {
         const product = productList[i]
-        count += product.count * product.price
+        if (product.check) {
+          count += product.count * product.price
+        }
       }
     }
     return count.toFixed(2)
@@ -79,19 +86,25 @@ const useCartEffect = (shopId) => {
   const productList = computed(() => {
     return cartList[shopId] || []
   })
-  return { total, price, changeCartItemInfo, productList }
+  const changeCartItemChecked = (shopId, productId) => {
+    console.log(shopId, productId)
+    store.commit('changeCartItemChecked', { shopId, productId })
+  }
+  return { total, price, changeCartItemInfo, productList, changeCartItemChecked }
 }
 export default {
   name: 'Cart',
   setup () {
     const route = useRoute()
     const shopId = route.params.id
-    const { total, price, changeCartItemInfo, productList } = useCartEffect(shopId)
+    const { total, price, changeCartItemInfo, productList, changeCartItemChecked } = useCartEffect(shopId)
     return {
       total,
       price,
+      productList,
+      shopId,
       changeCartItemInfo,
-      productList
+      changeCartItemChecked
     }
   }
 }
@@ -111,12 +124,19 @@ export default {
   overflow-y: scroll;
   flex: 1;
   background: #FFF;
+
   &__item {
     position: relative;
     display: flex;
     padding: .12rem 0;
     margin: 0 .16rem;
     border-bottom: .01rem solid $content-bgColor;
+    &__checked {
+      line-height: .5rem;
+      margin-right: .2rem;
+      color: #0091FF;
+      font-size: .2rem;
+    }
     &__detail {
       overflow: hidden;
     }
