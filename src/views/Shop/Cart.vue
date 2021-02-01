@@ -1,5 +1,7 @@
 <template>
-  <div class="mask" v-if="showCart"></div>
+  <div class="mask"
+    v-if="showCart"
+    @click="toggleCartShow"></div>
   <div class="cart">
     <div class="product" v-if="showCart">
       <div class="product__header">
@@ -10,10 +12,9 @@
             v-html="allChecked ? '&#xe652;': '&#xe6f7;' "></span>
           全选
         </div>
-        <div
-          class="product__header__clear"
-          @click="() => cleanCartProducts(shopId)">
-          清空购物车
+        <div class="product__header__clear">
+          <span class="product__header__clear__btn"
+          @click="() => cleanCartProducts(shopId)">清空购物车</span>
         </div>
       </div>
       <template
@@ -60,7 +61,11 @@
       <div class="check__info">
         总计：<span class="check__info__price">&yen;{{ price }}</span>
       </div>
-      <div class="check__btn">去结算</div>
+      <div class="check__btn">
+        <router-link :to="{ name: 'Home'}">
+         去结算
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -140,15 +145,18 @@ const useCartEffect = (shopId) => {
     allChecked
   }
 }
+const toggleCartEffect = () => {
+  const showCart = ref(false)
+  const toggleCartShow = () => {
+    showCart.value = !showCart.value
+  }
+  return { showCart, toggleCartShow }
+}
 export default {
   name: 'Cart',
   setup () {
     const route = useRoute()
     const shopId = route.params.id
-    const showCart = ref(false)
-    const toggleCartShow = () => {
-      showCart.value = !showCart.value
-    }
     const {
       total,
       price,
@@ -159,6 +167,7 @@ export default {
       setCartItemsChecked,
       allChecked
     } = useCartEffect(shopId)
+    const { showCart, toggleCartShow } = toggleCartEffect()
     return {
       total,
       price,
@@ -185,7 +194,7 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 2;
-  background: #fff;
+  background: $bgColor;
 }
 .mask {
   position: fixed;
@@ -200,26 +209,31 @@ export default {
 .product {
   overflow-y: scroll;
   flex: 1;
-  background: #FFF;
+  background: $bgColor;
   &__header {
     display: flex;
     line-height: .52rem;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid $content-bgColor;
     font-size: .14rem;
-    color:#333;
+    color:$content-font-color;
     &__all {
       width: .64rem;
       margin-left: .18rem;
     }
     &__icon {
+      margin-right: .1rem;
       display: inline-block;
-      color:#0091ff;
+      color:$btn-bgColor;
       font-size: .2rem;
+      vertical-align: top;
     }
     &__clear {
       flex: 1;
       margin-right: .16rem;
       text-align: right;
+      &__btn {
+        display: inline-block;
+      }
     }
   }
 
@@ -232,7 +246,7 @@ export default {
     &__checked {
       line-height: .5rem;
       margin-right: .2rem;
-      color: #0091FF;
+      color: $btn-bgColor;
       font-size: .2rem;
     }
     &__detail {
@@ -269,7 +283,7 @@ export default {
     .product__number {
       position: absolute;
       right: 0;
-      bottom: .12rem;
+      bottom: .26rem;
       &__minus, &__plus
        {
         display: inline-block;
@@ -319,7 +333,7 @@ export default {
       border-radius: .1rem;
       font-size: .12rem;
       text-align: center;
-      color: #fff;
+      color: $bgColor;
       transform: scale(.5);
       transform-origin: left center;
     }
@@ -338,8 +352,11 @@ export default {
     width: .98rem;
     background-color: #4FB0F9;
     text-align: center;
-    color: #FFF;
     font-size: .14rem;
+    > a {
+      text-decoration: none;
+      color: $bgColor;
+    }
   }
 }
 </style>
