@@ -14,7 +14,8 @@
         </div>
         <div class="product__header__clear">
           <span class="product__header__clear__btn"
-          @click="() => cleanCartProducts(shopId)">清空购物车</span>
+          @click="() => cleanCartProducts(shopId)"
+          >清空购物车</span>
         </div>
       </div>
       <template
@@ -81,7 +82,7 @@ const useCartEffect = (shopId) => {
   const cartList = store.state.cartList
 
   const total = computed(() => {
-    const productList = cartList[shopId]
+    const productList = cartList[shopId]?.productList
     let count = 0
     if (productList) {
       for (const i in productList) {
@@ -92,7 +93,7 @@ const useCartEffect = (shopId) => {
     return count
   })
   const price = computed(() => {
-    const productList = cartList[shopId]
+    const productList = cartList[shopId]?.productList
     let count = 0
     if (productList) {
       for (const i in productList) {
@@ -105,11 +106,11 @@ const useCartEffect = (shopId) => {
     return count.toFixed(2)
   })
   const productList = computed(() => {
-    return cartList[shopId] || []
+    return cartList[shopId]?.productList || []
   })
 
   const allChecked = computed(() => {
-    const productList = cartList[shopId]
+    const productList = cartList[shopId]?.productList
     let result = true
     if (productList) {
       for (const key in productList) {
