@@ -10,11 +10,11 @@
       <div class="mask__content__btns">
         <div
           class="mask__content__btn mask__content__btn--first"
-          @click="handleCancelOrder"
+          @click="() => handleConfirmOrder(false)"
         >取消订单</div>
         <div
           class="mask__content__btn mask__content__btn--last"
-          @click="handleConfirmOrder"
+          @click="() => handleConfirmOrder(true)"
         >确认支付</div>
       </div>
     </div>
@@ -22,21 +22,46 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 import { useCommonCartEffect } from '../../effects/cartEffects'
+import { post } from '../../utils/request.js'
+
 export default {
   name: 'Order',
   setup () {
+    const router = useRouter()
     const route = useRoute()
-    const shopId = route.params.id
-    const { calculations } = useCommonCartEffect(shopId)
-    const handleCancelOrder = () => {
-      alert('cancel')
+    const store = useStore()
+    const shopId = parseInt(route.params.id, 10)
+    const { calculations, shopName, productList } = useCommonCartEffect(shopId)
+
+    const handleConfirmOrder = async (isCanceled) => {
+      const products = []
+      for (const i in productList.value) {
+        const product = productList.value[i]
+        products.push({ id: parseInt(product._id, 10), num: product.count })
+      }
+      try {
+        const result = await post('/order', {
+          addressId: 1,
+          shopId,
+          shopName: shopName.value,
+          isCanceled,
+          products
+        })
+        if (result.errno === 0) {
+          store.commit('clearCartData', { shopId })
+          router.push({ name: 'Home' })
+        } else {
+          // 下单失败的业务逻辑错误
+        }
+      } catch (e) {
+        // 下单失败
+        console.log(e)
+      }
     }
-    const handleConfirmOrder = () => {
-      alert('confirm')
-    }
-    return { calculations, handleCancelOrder, handleConfirmOrder }
+    return { calculations, handleConfirmOrder }
   }
 }
 </script>
