@@ -1,10 +1,10 @@
 <template>
   <div class="order">
     <div class="order__price">实付金额 <b>¥{{calculations.price}}</b></div>
-    <div class="order__btn">提交订单</div>
+    <div class="order__btn" @click="() => handleMaskChange(true)">提交订单</div>
   </div>
-  <div class="mask">
-    <div class="mask__content">
+  <div class="mask" v-show="showMask" @click="() => handleMaskChange(false)">
+    <div class="mask__content" @click.stop>
       <h3 class="mask__content__title">确认要离开收银台？</h3>
       <p class="mask__content__desc">请尽快完成支付，否则将被取消</p>
       <div class="mask__content__btns">
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useCommonCartEffect } from '../../effects/cartEffects'
@@ -61,7 +62,11 @@ export default {
         console.log(e)
       }
     }
-    return { calculations, handleConfirmOrder }
+    const showMask = ref(false)
+    const handleMaskChange = (status) => {
+      showMask.value = status
+    }
+    return { calculations, handleConfirmOrder, handleMaskChange, showMask }
   }
 }
 </script>
@@ -86,7 +91,7 @@ export default {
   }
   &__btn {
     width: .98rem;
-    background: #4FB0F9;
+    background: $mask-btn-color;
     color: $bgColor;
     text-align: center;
     font-size: .14rem;
@@ -114,12 +119,12 @@ export default {
       margin: .24rem 0 0 0;
       line-height: .26rem;
       font-size: .18rem;
-      color: #333;
+      color: $content-font-color;
     }
     &__desc {
       margin: .08rem 0 0 0;
       font-size: .14rem;
-      color: #666666;
+      color: $medium-fontColor;
     }
     &__btns {
       display: flex;
@@ -133,13 +138,13 @@ export default {
       font-size: .14rem;
       &--first {
         margin-right: .12rem;
-        border: .01rem solid #4FB0F9;
-        color: #4FB0F9;
+        border: .01rem solid $mask-btn-color;
+        color: $mask-btn-color;
       }
       &--last {
         margin-left: .12rem;
-        background: #4FB0F9;
-        color: #fff;
+        background: $mask-btn-color;
+        color: $bgColor;
       }
     }
   }
