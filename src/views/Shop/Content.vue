@@ -127,7 +127,7 @@ export default {
   &__item {
     text-align: center;
     line-height: .4rem;
-    font-size: 14px;
+    font-size: .14rem;
     color:#333;
     &--active {
       background: #fff;
