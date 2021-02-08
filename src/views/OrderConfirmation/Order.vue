@@ -28,44 +28,51 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCommonCartEffect } from '../../effects/cartEffects'
 import { post } from '../../utils/request.js'
 
+const useConfirmOrderEffect = () => {
+  const router = useRouter()
+  const route = useRoute()
+  const store = useStore()
+  const shopId = parseInt(route.params.id, 10)
+  const { calculations, shopName, productList } = useCommonCartEffect(shopId)
+  const handleConfirmOrder = async (isCanceled) => {
+    const products = []
+    for (const i in productList.value) {
+      const product = productList.value[i]
+      products.push({ id: parseInt(product._id, 10), num: product.count })
+    }
+    try {
+      const result = await post('/order', {
+        addressId: 1,
+        shopId,
+        shopName: shopName.value,
+        isCanceled,
+        products
+      })
+      if (result.errno === 0) {
+        store.commit('clearCartData', { shopId })
+        router.push({ name: 'Home' })
+      } else {
+        // 下单失败的业务逻辑错误
+      }
+    } catch (e) {
+      // 下单失败
+      console.log(e)
+    }
+  }
+  return { handleConfirmOrder, calculations }
+}
+const useShowMaskEffect = () => {
+  const showMask = ref(false)
+  const handleMaskChange = (status) => {
+    showMask.value = status
+  }
+  return { showMask, handleMaskChange }
+}
 export default {
   name: 'Order',
   setup () {
-    const router = useRouter()
-    const route = useRoute()
-    const store = useStore()
-    const shopId = parseInt(route.params.id, 10)
-    const { calculations, shopName, productList } = useCommonCartEffect(shopId)
-
-    const handleConfirmOrder = async (isCanceled) => {
-      const products = []
-      for (const i in productList.value) {
-        const product = productList.value[i]
-        products.push({ id: parseInt(product._id, 10), num: product.count })
-      }
-      try {
-        const result = await post('/order', {
-          addressId: 1,
-          shopId,
-          shopName: shopName.value,
-          isCanceled,
-          products
-        })
-        if (result.errno === 0) {
-          store.commit('clearCartData', { shopId })
-          router.push({ name: 'Home' })
-        } else {
-          // 下单失败的业务逻辑错误
-        }
-      } catch (e) {
-        // 下单失败
-        console.log(e)
-      }
-    }
-    const showMask = ref(false)
-    const handleMaskChange = (status) => {
-      showMask.value = status
-    }
+    const { calculations, handleConfirmOrder } = useConfirmOrderEffect()
+    const { showMask, handleMaskChange } = useShowMaskEffect()
     return { calculations, handleConfirmOrder, handleMaskChange, showMask }
   }
 }
