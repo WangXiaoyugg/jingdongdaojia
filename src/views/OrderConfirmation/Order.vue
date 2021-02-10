@@ -145,7 +145,7 @@ export default {
       font-size: .14rem;
       &--first {
         margin-right: .12rem;
-        border: .01rem solid $mask-btn-color;
+        border: 1px solid $mask-btn-color;
         color: $mask-btn-color;
       }
       &--last {

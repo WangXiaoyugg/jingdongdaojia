@@ -1,6 +1,8 @@
 <template>
   <div class="nearby">
-    <div class="nearby__title">附近店铺</div>
+    <div class="nearby__title">附近店铺
+
+    </div>
     <router-link
       v-for="item in nearbyList"
       :key="item._id"

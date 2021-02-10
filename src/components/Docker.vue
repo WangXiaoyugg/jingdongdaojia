@@ -10,6 +10,7 @@
         <div class="docker__title">{{item.text}}</div>
       </router-link>
     </div>
+
   </div>
 </template>
 
@@ -40,7 +41,7 @@ export default {
   bottom: 0;
   width: 100%;
   height: .49rem;
-  border-top: 0.01rem solid $content-bgColor;
+  border-top: 1px solid $content-bgColor;
 
   &__item {
     flex: 1;
